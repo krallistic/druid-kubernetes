@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: druid-middlemanager-pod
+  labels:
+    name: druid-middlemanager-pod
+    context: druid-k8s
+spec:
+  containers:
+    -
+      name: druid-middlemanager
+      image: jkaralus/druid8s-middlemanager:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        -
+          containerPort: 8091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: druid-middlemanager-service
+  labels:
+    name: druid-middlemanager-pod
+    context: druid-k8s
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 8091
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: druid-middlemanager-pod
+    context: druid-k8s

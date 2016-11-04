@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: druid-quckstart-pod
+  labels:
+    name: druid-quickstart-pod
+    context: druid-k8s
+spec:
+  containers:
+    -
+      name: druid-quickstart
+      image: jkaralus/druid8s-quickstart:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        -
+          containerPort: 9095
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: druid-quickstart-service
+  labels:
+    name: druid-quickstart-pod
+    context: druid-k8s
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 9095
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: druid-quickstart-pod
+    context: druid-k8s

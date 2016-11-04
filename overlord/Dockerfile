@@ -20,4 +20,4 @@ EXPOSE 8100 8101 8102 8103 8104
 #TODO expose only Ports needed.
 
 WORKDIR /iap-druid/imply-$IAP_VERSION/
-ENTRYPOINT bin/run-druid coordinator conf
+ENTRYPOINT bin/run-druid overlord conf

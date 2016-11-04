@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: druid-overlord-pod
+  labels:
+    name: druid-overlord-pod
+    context: druid-k8s
+spec:
+  containers:
+    -
+      name: druid-overlord
+      image: jkaralus/druid8s-overlord:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        -
+          containerPort: 8090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: druid-overlord-service
+  labels:
+    name: druid-overlord-pod
+    context: druid-k8s
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 8090
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: druid-overlord-pod
+    context: druid-k8s

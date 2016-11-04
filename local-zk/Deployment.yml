@@ -7,8 +7,7 @@ metadata:
     context: druid-k8s
 spec:
   containers:
-    -
-      name: druid-local-zk
+    - name: druid-local-zk
       image: jkaralus/druid8s-local-zk:latest
       imagePullPolicy: IfNotPresent
       ports:
@@ -24,15 +23,14 @@ metadata:
     name: druid-local-zk-pod
     context: druid-k8s
 spec:
-  type: NodePort
-   ports:
-     - name: client
-       port: 2181
-     - name: follower
-       port: 2888
-     - name: election
-       port: 3888
-  # label keys and values that must match in order to receive traffic for this service
+  ports:
+       # the port that this service should serve on
+    - name: client
+      port: 2181
+    - name: follower
+      port: 2888
+    - name: election
+      port: 3888
   selector:
     name: druid-local-zk-pod
     context: druid-k8s

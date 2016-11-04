@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: druid-pivot-pod
+  labels:
+    name: druid-pivot-pod
+    context: druid-k8s
+spec:
+  containers:
+    -
+      name: druid-pivot
+      image: jkaralus/druid8s-pivot:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        -
+          containerPort: 9095
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: druid-pivot-service
+  labels:
+    name: druid-pivot-pod
+    context: druid-k8s
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 9095
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: druid-pivot-pod
+    context: druid-k8s

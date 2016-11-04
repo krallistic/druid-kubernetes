@@ -10,6 +10,10 @@ RUN wget -q -O - https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get update && apt-get install -y openjdk-8-jre nodejs
 RUN apt-get install -y libthreads-perl libc6 perl perl-doc python
 
-WORKDIR /iap-druid/imply-$IAP_VERSION/
+RUN mkdir /iap-druid
 RUN wget -q -O - https://static.imply.io/release/imply-$IAP_VERSION.tar.gz | tar -xzf - -C /iap-druid/
-ENTRYPOINT ll
+WORKDIR /iap-druid/imply-$IAP_VERSION/
+
+COPY common.runtime.properties /iap-druid/imply-$IAP_VERSION/conf/druid/_common/common.runtime.properties
+
+ENTRYPOINT bash

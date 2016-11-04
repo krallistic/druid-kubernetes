@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: druid-broker-pod
+  labels:
+    name: druid-broker-pod
+    context: druid-k8s
+spec:
+  containers:
+    -
+      name: druid-broker
+      image: jkaralus/druid8s-broker:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        -
+          containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: druid-broker-service
+  labels:
+    name: druid-broker-pod
+    context: druid-k8s
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 8082
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    name: druid-broker-pod
+    context: druid-k8s

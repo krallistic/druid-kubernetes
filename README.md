@@ -9,3 +9,8 @@ curl -Lo kubectl http://storage.googleapis.com/kubernetes-release/release/v1.3.0
 
 minikube start
 eval $(minikube docker-env)
+
+#Deploy in the correct Order, should be better in future Iterations
+kubectl create -f local-zk/Deployment.yml 
+kubectl create -f coordinator/Deployment.yml 
+kubectl create -f overlord/Deployment.yml 

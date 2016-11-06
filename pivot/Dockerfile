@@ -9,16 +9,7 @@ FROM jkaralus/druid8s-base:latest
 # - 3306: MySQL
 # - 2181 2888 3888: ZooKeeper
 # - 8100 8101 8102 8103 8104 : peon ports
-EXPOSE 8081
-EXPOSE 8082
-EXPOSE 8083
-EXPOSE 8090
-EXPOSE 8091
-EXPOSE 3306
-EXPOSE 2181 2888 3888
-EXPOSE 8100 8101 8102 8103 8104
 EXPOSE 9095
-#TODO expose only Ports needed.
 
 ADD config.yaml /iap-druid/imply-$IAP_VERSION/conf/pivot/config.yaml
 

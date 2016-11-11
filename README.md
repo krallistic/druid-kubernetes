@@ -1,3 +1,5 @@
+Work in Progress
+
 # druid-kubernetes
 Setup Druid on a Kubernetes Cluster.
 
@@ -11,18 +13,18 @@ minikube start
 eval $(minikube docker-env)
 
 #Deploy in the correct Order, should be better in future Iterations
-kubectl create -f local-zk/Deployment.yml 
+kubectl create -f local-zk/Deployment.yml
 
-kubectl create -f metadata-mysql/Deployment.yml 
+kubectl create -f metadata-mysql/Deployment.yml
 
-kubectl create -f coordinator/Deployment.yml 
+kubectl create -f coordinator/Deployment.yml
 
-kubectl create -f overlord/Deployment.yml 
+kubectl create -f overlord/Deployment.yml
 
-kubectl create -f middleManager/Deployment.yml 
+kubectl create -f middleManager/Deployment.yml
 
-kubectl create -f historical/Deployment.yml 
+kubectl create -f historical/Deployment.yml
 
-kubectl create -f broker/Deployment.yml 
+kubectl create -f broker/Deployment.yml
 
-kubectl create -f pivot/Deployment.yml 
+kubectl create -f pivot/Deployment.yml

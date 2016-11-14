@@ -1,0 +1,42 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.metadataSql.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.metadataSql.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.metadataSql.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.metadataSql.name }}"
+        image: "{{ .Values.nodes.metadataSql.image.repository }}:{{ .Values.nodes.metadataSql.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.metadataSql.image.pullPolicy }}
+        ports:
+        {{range .Values.nodes.metadataSql.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+        #TODO add readiness & liveness probes
+        env:
+        #TODO add range here, so no predefined fields
+          - name: MYSQL_DATABASE
+            value: {{ .Values.nodes.metadataSql.image.env.mysqlDatabase }}
+          - name: MYSQL_USER
+            value:  {{ .Values.nodes.metadataSql.image.env.mysqlUser }}
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: mysql-root-password
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: mysql-password
+        resources:
+{{ toYaml .Values.resources | indent 12 }}

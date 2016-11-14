@@ -1,0 +1,9 @@
+apiVersion: v1
+description: A Helm chart for running druid ontop of kubernetes, still work in progress. Single Node Druid based of the quickstart container from imply.
+ Only recommended asquick testing tool.
+name: druid-quickstart
+version: 0.1.0
+maintainers:
+  - name: Jakob K.
+    email: jakob.karalus@codecentric.de
+

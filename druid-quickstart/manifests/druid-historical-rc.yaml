@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: druid-historical-rc
+  labels:
+    heritage: helm
+    app: druid
+spec:
+  replicas: 1
+  selector:
+    name: druid-historical
+  template:
+    metadata:
+      labels:
+        name: druid-historical
+        app: druid
+    spec:
+      containers:
+      - name: druid-historical
+        image: jkaralus/druid8s-historical:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+         - containerPort: 8083

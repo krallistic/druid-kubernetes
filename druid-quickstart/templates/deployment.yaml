@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.quickstart.repository }}:{{ .Values.image.quickstart.tag }}"
+        imagePullPolicy: {{ .Values.image.quickstart.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.quickstart.port }}
+        #TODO add readiness & liveness probes
+        resources:
+{{ toYaml .Values.resources | indent 12 }}

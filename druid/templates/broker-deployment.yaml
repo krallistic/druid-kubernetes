@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.broker.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}"
+        image: "{{ .Values.nodes.broker.image.repository }}:{{ .Values.nodes.broker.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.broker.image.pullPolicy }}
+        volumeMounts:
+          - name: config-volume
+            mountPath: /iap-druid/imply-$IAP_VERSION/conf/
+
+        #TODO add readiness & liveness probes
+        #TODO reenable ressources here
+        ports:
+        {{range .Values.nodes.broker.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: common-runtime-configmap
+            items:
+            - key: common.runtime.properties
+              path: druic/_common/common.runtime.properties

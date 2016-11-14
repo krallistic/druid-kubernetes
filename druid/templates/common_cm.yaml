@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-runtime-configmap
+data:
+  common.runtime.properties: |-
+    {{ .Files.Get "config/common.runtime.properties" | indent 4 }}

@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.localZk.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.localZk.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.localZk.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.localZk.name }}"
+        image: "{{ .Values.nodes.localZk.image.repository }}:{{ .Values.nodes.localZk.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.localZk.image.pullPolicy }}
+        ports:
+        {{range .Values.nodes.localZk.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+        #TODO add readiness & liveness probes
+        resources:
+{{ toYaml .Values.resources | indent 12 }}

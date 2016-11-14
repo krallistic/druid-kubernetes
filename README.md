@@ -8,6 +8,14 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.12.2/minik
 #Install kubectl
 curl -Lo kubectl http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 
+#Completion
+brew install bash-completion
+
+
+#Install Helm-client
+brew cask install helm
+
+
 
 minikube start
 eval $(minikube docker-env)
@@ -28,3 +36,26 @@ kubectl create -f historical/Deployment.yml
 kubectl create -f broker/Deployment.yml
 
 kubectl create -f pivot/Deployment.yml
+
+
+minikube service druid-quickstart-service
+
+
+#Jenkins
+helm install stable/jenkins
+minikube service hoping-kitten-jenkins --url
+printf $(printf '\%o' `kubectl get secret --namespace default hoping-kitten-jenkins -o jsonpath="{.data.jenkins-admin-password[*]}"`);echo
+
+
+
+
+#Steps for chart
+1. Create Druid chart 'helm create druid'
+2. Modify Values & Deployment for simple quickstart
+3. Make full Cluster with every pod type
+
+4. Add Secret Handling
+
+
+3. Add requirments with mysql requirement
+

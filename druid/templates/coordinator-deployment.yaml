@@ -21,5 +21,4 @@ spec:
           - containerPort: {{ .port }}
         {{end}}
         #TODO add readiness & liveness probes
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
+

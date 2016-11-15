@@ -2,3 +2,5 @@ dependencies:
   - name: mysql
     version: 0.2.1
     repository: stable/mysql
+  - name: util
+    version: 0.1.0

@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: common-runtime-configmap
 data:
-  common.runtime.properties: |-
-{{ .Files.Get "config/common-runtime.properties" | indent 4 }}
+  common.runtime.properties: |
+{{ tuple "config/_common-runtime.properties" . | include "template" | indent 4 }}

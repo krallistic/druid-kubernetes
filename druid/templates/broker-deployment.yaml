@@ -18,7 +18,7 @@ spec:
         imagePullPolicy: {{ .Values.nodes.broker.image.pullPolicy }}
         volumeMounts:
           - name: config-volume
-            mountPath: /iap-druid/imply-$IAP_VERSION/conf/
+            mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/_common/"
 
         #TODO add readiness & liveness probes
         #TODO reenable ressources here
@@ -33,4 +33,4 @@ spec:
             name: common-runtime-configmap
             items:
             - key: common.runtime.properties
-              path: druic/_common/common.runtime.properties
+              path: common.runtime.properties

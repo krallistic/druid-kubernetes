@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.tranquility.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.tranquility.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.tranquility.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.tranquility.name }}"
+        image: "{{ .Values.nodes.tranquility.image.repository }}:{{ .Values.nodes.tranquility.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.tranquility.image.pullPolicy }}
+        ports:
+        {{range .Values.nodes.tranquility.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/tranquility/"
+        #TODO add readiness & liveness probes
+      volumes:
+        - name: config-volume
+          configMap:
+            name: metrics-tranquility-configmap
+            items:
+            - key: metrics-server.json
+              path: metrics-server.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodes.tranquility.service.name }}
+  #TODO flexible service Name, configMap
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.nodes.tranquility.service.type }}
+  ports:
+  {{range .Values.nodes.tranquility.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  selector:
+    name: "{{ .Chart.Name }}-{{ .Values.nodes.tranquility.name }}-rc"

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metrics-tranquility-configmap
+data:
+  metrics-server.json: |
+{{ tuple "config/_metrics-server.json" . | include "template" | indent 4 }}

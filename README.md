@@ -1,7 +1,22 @@
-Work in Progress
+Work in Progress. 
 
 # druid-kubernetes
-Setup Druid on a Kubernetes Cluster.
+Setup Druid on a Kubernetes Cluster with Helm. 
+The Setup of zookeeper and postgres (as metadata storage is handled by subcharts), and therefore zK run with a PetSet in a 3 Node HA.
+All Druid Nodes run in their own pods, which are created by deployments. Should be somewhat scaleable
+SegmentStore is 
+
+#Run it (currently only tested on minikube)
+- checkout repo
+- `helm init` (assumes working kubectl, for example with `minikube start`)
+- `helm dep update` Pull in deps
+- `helm upgrade --debug development druid/ --install`
+- Access the pivot UI `minikube service druid-pivot-service` (wait till the cluster is fully run, especially zookeeper takes a while
+- Delete the Cluster with `helm delete development --purge ` PersistentStorage from the zK must be deleted manually.
+
+
+
+#Assorted Notes: 
 
 #Install Mini cube
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.12.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
@@ -47,15 +62,4 @@ minikube service hoping-kitten-jenkins --url
 printf $(printf '\%o' `kubectl get secret --namespace default hoping-kitten-jenkins -o jsonpath="{.data.jenkins-admin-password[*]}"`);echo
 
 
-
-
-#Steps for chart
-1. Create Druid chart 'helm create druid'
-2. Modify Values & Deployment for simple quickstart
-3. Make full Cluster with every pod type
-
-4. Add Secret Handling
-
-
-3. Add requirments with mysql requirement
 

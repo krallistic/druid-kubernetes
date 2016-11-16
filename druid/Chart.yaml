@@ -1,0 +1,8 @@
+apiVersion: v1
+description: A Helm chart for running druid ontop of kubernetes, still work in progress.
+name: druid
+version: 0.1.0
+maintainers:
+  - name: Jakob K.
+    email: jakob.karalus@codecentric.de
+

@@ -12,3 +12,4 @@ docker build -t jkaralus/druid8s-middlemanager:$TAG middleManager
 docker build -t jkaralus/druid8s-historical:$TAG historical
 docker build -t jkaralus/druid8s-broker:$TAG broker
 docker build -t jkaralus/druid8s-pivot:$TAG pivot
+docker build -t jkaralus/druid8s-tranquility:$TAG tranquility

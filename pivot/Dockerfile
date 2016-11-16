@@ -11,8 +11,9 @@ FROM jkaralus/druid8s-base:latest
 # - 8100 8101 8102 8103 8104 : peon ports
 EXPOSE 9095
 
-ADD config.yaml /iap-druid/imply-$IAP_VERSION/conf/pivot/config.yaml
+#ADD config.yaml /iap-druid/imply-$IAP_VERSION/conf/pivot/config.yaml
 
 
 WORKDIR /iap-druid/imply-$IAP_VERSION/
-ENTRYPOINT cd /iap-druid/imply-$IAP_VERSION/ && bin/run-pivot conf
+ENTRYPOINT bin/run-pivot conf
+#ENTRYPOINT /bin/bash

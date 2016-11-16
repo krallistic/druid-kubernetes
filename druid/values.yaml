@@ -8,11 +8,12 @@ iapVersion: "imply-1.3.1"
 debug: "True"
 
 postgresqlName: "postgresql"
-zkName: "druid-zk"
+
+druidSegmentDeepStorage: "druid-deep-storage"
 
 zookeeper:
-  Replicas: 1
-  Name: druid-zk
+  Replicas: 3
+  Name: zk
 postgresql:
   postgresUser: druid
   postgresDatabase: druid
@@ -32,6 +33,19 @@ nodes:
       ports:
         - name: coordinator-port
           port: 8081
+  overlord:
+    name: "overlord"
+    replicaCount: 1
+    image:
+      repository: jkaralus/druid8s-overlord
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: druid-overlord-service
+      type: NodePort
+      ports:
+        - name: overlord-port
+          port: 8090
   historical:
     name: "historical"
     replicaCount: 1
@@ -58,7 +72,45 @@ nodes:
       ports:
         - name: broker-port
           port: 8082
-
+  tranquility:
+    name: "tranquility"
+    replicaCount: 1
+    image:
+      repository: jkaralus/druid8s-tranquility
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: druid-tranquility-service
+      type: NodePort
+      ports:
+        - name: tranquility-port
+          port: 8200
+  pivot:
+    name: "pivot"
+    replicaCount: 1
+    image:
+      repository: jkaralus/druid8s-pivot
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: druid-pivot-service
+      type: NodePort
+      ports:
+        - name: pivot-port
+          port: 9095
+  middlemanager:
+    name: "middlemanager"
+    replicaCount: 1
+    image:
+      repository: jkaralus/druid8s-middlemanager
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: druid-middlemanager-service
+      type: NodePort
+      ports:
+        - name: middlemanager-port
+          port: 8091
 
 image:
   historical:

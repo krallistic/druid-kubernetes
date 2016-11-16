@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.overlord.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.overlord.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.overlord.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.overlord.name }}"
+        image: "{{ .Values.nodes.overlord.image.repository }}:{{ .Values.nodes.overlord.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.overlord.image.pullPolicy }}
+        ports:
+        {{range .Values.nodes.overlord.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/"
+        #TODO add readiness & liveness probes
+      volumes:
+        - name: config-volume
+          configMap:
+            name: common-runtime-configmap
+            items:
+            - key: common.runtime.properties
+              path: _common/common.runtime.properties
+            - key: "{{ .Values.nodes.overlord.name }}.runtime.properties"
+              path: overlord/runtime.properties
+            - key: "{{ .Values.nodes.overlord.name }}.jvm.config"
+              path: overlord/jvm.config
+            - key: "{{ .Values.nodes.overlord.name }}.main.config"
+              path: overlord/main.config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodes.overlord.service.name }}
+  #TODO flexible service Name, configMap
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.nodes.overlord.service.type }}
+  ports:
+  {{range .Values.nodes.overlord.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  selector:
+    name: "{{ .Chart.Name }}-{{ .Values.nodes.overlord.name }}-rc"

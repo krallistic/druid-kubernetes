@@ -11,3 +11,21 @@ data:
 {{ tuple "config/overlord/_jvm.config" . | include "template" | indent 4 }}
   overlord.main.config: |
 {{ tuple "config/overlord/_main.config" . | include "template" | indent 4 }}
+  middlemanager.runtime.properties: |
+{{ tuple "config/middlemanager/_runtime.properties" . | include "template" | indent 4 }}
+  middlemanager.jvm.config: |
+{{ tuple "config/middlemanager/_jvm.config" . | include "template" | indent 4 }}
+  middlemanager.main.config: |
+{{ tuple "config/middlemanager/_main.config" . | include "template" | indent 4 }}
+  coordinator.runtime.properties: |
+{{ tuple "config/coordinator/_runtime.properties" . | include "template" | indent 4 }}
+  coordinator.jvm.config: |
+{{ tuple "config/coordinator/_jvm.config" . | include "template" | indent 4 }}
+  coordinator.main.config: |
+{{ tuple "config/coordinator/_main.config" . | include "template" | indent 4 }}
+  historical.runtime.properties: |
+{{ tuple "config/historical/_runtime.properties" . | include "template" | indent 4 }}
+  historical.jvm.config: |
+{{ tuple "config/historical/_jvm.config" . | include "template" | indent 4 }}
+  historical.main.config: |
+{{ tuple "config/historical/_main.config" . | include "template" | indent 4 }}

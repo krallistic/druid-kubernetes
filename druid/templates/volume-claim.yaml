@@ -10,3 +10,16 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.druidSegmentCache }}
+  annotations:
+    volume.alpha.kubernetes.io/storage-class: "HostPath"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

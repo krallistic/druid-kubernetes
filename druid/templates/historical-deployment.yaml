@@ -24,15 +24,26 @@ spec:
         volumeMounts:
           - name: data
             mountPath: /var/druid/segments
+          - name: segment-cache
+            mountPath: /var/druid/segment-cache
           - name: config-volume
-            mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/_common/"
+            mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/"
       volumes:
       - name: data
         persistentVolumeClaim:
           claimName: {{ .Values.druidSegmentDeepStorage }}
+      - name: segment-cache
+        persistentVolumeClaim:
+          claimName: {{ .Values.druidSegmentCache }}
       - name: config-volume
         configMap:
           name: common-runtime-configmap
           items:
-          - key: common.runtime.properties
-            path: common.runtime.properties
+            - key: common.runtime.properties
+              path: _common/common.runtime.properties
+            - key: "{{ .Values.nodes.historical.name }}.runtime.properties"
+              path: historical/runtime.properties
+            - key: "{{ .Values.nodes.historical.name }}.jvm.config"
+              path: historical/jvm.config
+            - key: "{{ .Values.nodes.historical.name }}.main.config"
+              path: historical/main.config

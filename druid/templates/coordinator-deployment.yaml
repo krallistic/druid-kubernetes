@@ -22,7 +22,8 @@ spec:
         {{end}}
         volumeMounts:
         - name: config-volume
-          mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/_common/"
+          mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/"
+
         #TODO add readiness & liveness probes
       volumes:
         - name: config-volume
@@ -30,4 +31,10 @@ spec:
             name: common-runtime-configmap
             items:
             - key: common.runtime.properties
-              path: common.runtime.properties
+              path: _common/common.runtime.properties
+            - key: "{{ .Values.nodes.coordinator.name }}.runtime.properties"
+              path: coordinator/runtime.properties
+            - key: "{{ .Values.nodes.coordinator.name }}.jvm.config"
+              path: coordinator/jvm.config
+            - key: "{{ .Values.nodes.coordinator.name }}.main.config"
+              path: coordinator/main.config

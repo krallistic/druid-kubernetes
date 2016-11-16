@@ -10,6 +10,8 @@ debug: "True"
 postgresqlName: "postgresql"
 
 druidSegmentDeepStorage: "druid-deep-storage"
+druidSegmentCache: "druid-deep-segment-cache"
+
 
 zookeeper:
   Replicas: 3
@@ -111,6 +113,14 @@ nodes:
       ports:
         - name: middlemanager-port
           port: 8091
+        - name: peon-0
+          port: 8100
+        - name: peon-1
+          port: 8101
+        - name: peon-2
+          port: 8102
+        - name: peon-3
+          port: 8103
 
 image:
   historical:

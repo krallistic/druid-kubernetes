@@ -1,0 +1,23 @@
+# The port on which the Pivot server will listen on.
+port: 9095
+
+# Pivot runtime directory TODO set to better path
+varDir: .
+
+clusters:
+  - name: druid
+    type: druid
+
+    # A Druid broker node that can serve data (only used if you have Druid based data source)
+    host: {{ .Values.nodes.broker.service.name }}:8082
+
+    # Background introspection frequency (in ms)
+    # - Set to '0' to disable background introspection.
+    sourceListRefreshInterval: 30000
+
+    # Foreground introspection
+    # Checks for new dataSources every time Pivot is loaded (default: false)
+    sourceListRefreshOnLoad: false
+
+# Data source definitions will go here
+dataSources: []

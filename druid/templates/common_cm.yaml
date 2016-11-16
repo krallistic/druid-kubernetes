@@ -5,3 +5,9 @@ metadata:
 data:
   common.runtime.properties: |
 {{ tuple "config/_common-runtime.properties" . | include "template" | indent 4 }}
+  overlord.runtime.properties: |
+{{ tuple "config/overlord/_runtime.properties" . | include "template" | indent 4 }}
+  overlord.jvm.config: |
+{{ tuple "config/overlord/_jvm.config" . | include "template" | indent 4 }}
+  overlord.main.config: |
+{{ tuple "config/overlord/_main.config" . | include "template" | indent 4 }}

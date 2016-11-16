@@ -15,3 +15,11 @@ We truncate at 24 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 24 -}}
 {{- end -}}
 
+{{/*
+Creates a truncated 24char name with the ReleaseName and a given Parameter, useful for sub-charts where fullname is used
+on the parent char overrides the name.
+*/}}
+{{- define "fullCustomName" -}}
+{{- $name := index . 0 -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 24 -}}
+{{- end -}}

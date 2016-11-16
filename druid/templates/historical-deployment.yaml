@@ -21,5 +21,18 @@ spec:
           - containerPort: {{ .port }}
         {{end}}
         #TODO add readiness & liveness probes
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
+        volumeMounts:
+          - name: data
+            mountPath: /var/druid/segments
+          - name: config-volume
+            mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/_common/"
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.druidSegmentDeepStorage }}
+      - name: config-volume
+        configMap:
+          name: common-runtime-configmap
+          items:
+          - key: common.runtime.properties
+            path: common.runtime.properties

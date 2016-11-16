@@ -1,6 +1,7 @@
 dependencies:
-  - name: mysql
-    version: 0.2.1
-    repository: stable/mysql
-  - name: util
-    version: 0.1.0
+- name: zookeeper
+  version: 0.1.1
+  repository: http://storage.googleapis.com/kubernetes-charts-incubator
+- name: postgresql
+  version: 0.2.0
+  repository: http://storage.googleapis.com/kubernetes-charts

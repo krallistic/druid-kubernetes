@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-{{ .Values.nodes.pivot.name }}-deployment"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.nodes.pivot.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Chart.Name }}-{{ .Values.nodes.pivot.name }}-rc"
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}-{{ .Values.nodes.pivot.name }}"
+        image: "{{ .Values.nodes.pivot.image.repository }}:{{ .Values.nodes.pivot.image.tag }}"
+        imagePullPolicy: {{ .Values.nodes.pivot.image.pullPolicy }}
+        ports:
+        {{range .Values.nodes.pivot.service.ports }}
+          - containerPort: {{ .port }}
+        {{end}}
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/pivot/"
+        #TODO add readiness & liveness probes
+      volumes:
+        - name: config-volume
+          configMap:
+            name: pivot-configmap
+            items:
+            - key: config.yaml
+              path: config.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodes.pivot.service.name }}
+  #TODO flexible service Name, configMap
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.nodes.pivot.service.type }}
+  ports:
+  {{range .Values.nodes.pivot.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  selector:
+    name: "{{ .Chart.Name }}-{{ .Values.nodes.pivot.name }}-rc"

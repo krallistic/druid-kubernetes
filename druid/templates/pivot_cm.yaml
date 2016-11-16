@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pivot-configmap
+data:
+  config.yaml: |
+{{ tuple "config/_config.yaml" . | include "template" | indent 4 }}

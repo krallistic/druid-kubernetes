@@ -3,15 +3,20 @@ Work in Progress.
 # druid-kubernetes
 Setup Druid on a Kubernetes Cluster with Helm. 
 The Setup of zookeeper and postgres (as metadata storage is handled by subcharts), and therefore zK run with a PetSet in a 3 Node HA.
-All Druid Nodes run in their own pods, which are created by deployments. Should be somewhat scaleable
-SegmentStore is 
+
+All Druid Nodes run in their own pods, which are created by deployments. Should be somewhat scaleable.
+
+SegmentCache is persistentVolume with `HostPath` so historicals on the same node could be using the same segment cache. SegmentStorage is currently set to NFS.
+
+Emmit metrics point to a tranquility node which indexes it into the cluster back again.
 
 #Run it (currently only tested on minikube)
 - checkout repo
+- build docker images, see `build_images.sh`
 - `helm init` (assumes working kubectl, for example with `minikube start`)
 - `helm dep update` Pull in deps
-- `helm upgrade --debug development druid/ --install`
-- Access the pivot UI `minikube service druid-pivot-service` (wait till the cluster is fully run, especially zookeeper takes a while
+- `helm upgrade --debug development druid/ --install` Start Cluster, takes a while till zookeeper is fully functional (~5min)
+- Access the pivot UI `minikube service druid-pivot-service` and you should see the Metric Datasource which are druids internal metrics.
 - Delete the Cluster with `helm delete development --purge ` PersistentStorage from the zK must be deleted manually.
 
 
@@ -35,7 +40,7 @@ brew cask install helm
 minikube start
 eval $(minikube docker-env)
 
-#Deploy in the correct Order, should be better in future Iterations
+#Deployments, not used anymore
 kubectl create -f local-zk/Deployment.yml
 
 kubectl create -f metadata-mysql/Deployment.yml

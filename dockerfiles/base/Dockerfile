@@ -15,5 +15,7 @@ RUN wget -q -O - https://static.imply.io/release/imply-$IAP_VERSION.tar.gz | tar
 WORKDIR /iap-druid/imply-$IAP_VERSION/
 
 #ADD common.runtime.properties /iap-druid/imply-$IAP_VERSION/conf/druid/_common/common.runtime.properties
+ADD run-druid /iap-druid/imply-$IAP_VERSION/bin/run-druid
+
 
 ENTRYPOINT bash

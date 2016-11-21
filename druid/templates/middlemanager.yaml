@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: middlemanager
+  name:  {{ .Values.nodes.middlemanager.service.name }}
   labels:
     app: druid
 spec:
@@ -19,18 +19,18 @@ spec:
 apiVersion: apps/v1alpha1
 kind: PetSet
 metadata:
-  name: middlemanager
+  name: {{ .Values.nodes.middlemanager.service.name }}
 spec:
-  serviceName: "middlemanager"
+  serviceName: {{ .Values.nodes.middlemanager.service.name }}
   replicas: 2
   template:
     metadata:
       labels:
-        app: middlemanager
+        app: druid
     spec:
       terminationGracePeriodSeconds: 0
       containers:
-      - name: middlemanager
+      - name: {{ .Values.nodes.middlemanager.service.name }}
         image: "{{ .Values.nodes.middlemanager.image.repository }}:{{ .Values.nodes.middlemanager.image.tag }}"
         imagePullPolicy: {{ .Values.nodes.middlemanager.image.pullPolicy }}
         ports:

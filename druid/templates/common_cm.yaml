@@ -29,3 +29,9 @@ data:
 {{ tuple "config/historical/_jvm.config" . | include "template" | indent 4 }}
   historical.main.config: |
 {{ tuple "config/historical/_main.config" . | include "template" | indent 4 }}
+  broker.runtime.properties: |
+{{ tuple "config/broker/_runtime.properties" . | include "template" | indent 4 }}
+  broker.jvm.config: |
+{{ tuple "config/broker/_jvm.config" . | include "template" | indent 4 }}
+  broker.main.config: |
+{{ tuple "config/broker/_main.config" . | include "template" | indent 4 }}

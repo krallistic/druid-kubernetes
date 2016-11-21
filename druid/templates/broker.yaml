@@ -12,6 +12,8 @@ spec:
         name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}-rc"
         app: {{ template "fullname" . }}
     spec:
+      hostname: broker
+      subdomain: druid
       containers:
       - name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}"
         image: "{{ .Values.nodes.broker.image.repository }}:{{ .Values.nodes.broker.image.tag }}"
@@ -34,3 +36,20 @@ spec:
             items:
             - key: common.runtime.properties
               path: common.runtime.properties
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodes.broker.service.name }}
+  #TODO flexible service Name, configMap
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.nodes.broker.service.type }}
+  ports:
+  {{range .Values.nodes.broker.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  selector:
+    name: "{{ .Chart.Name }}-{{ .Values.nodes.broker.name }}-rc"

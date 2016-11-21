@@ -54,8 +54,8 @@
         "tuningConfig" : {
           "type" : "realtime",
           "maxRowsInMemory" : "100000",
-          "intermediatePersistPeriod" : "PT10M",
-          "windowPeriod" : "PT10M"
+          "intermediatePersistPeriod" : "PT2M",
+          "windowPeriod" : "PT2M"
         }
       },
       "properties" : {

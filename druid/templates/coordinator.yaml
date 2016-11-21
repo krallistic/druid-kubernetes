@@ -38,3 +38,20 @@ spec:
               path: coordinator/jvm.config
             - key: "{{ .Values.nodes.coordinator.name }}.main.config"
               path: coordinator/main.config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodes.coordinator.service.name }}
+  #TODO flexible service Name, configMap
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.nodes.coordinator.service.type }}
+  ports:
+  {{range .Values.nodes.coordinator.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  selector:
+    name: "{{ .Chart.Name }}-{{ .Values.nodes.coordinator.name }}-rc"

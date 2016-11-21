@@ -1,19 +1,36 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+---
+apiVersion: v1
+kind: Service
 metadata:
-  name: "{{ .Chart.Name }}-{{ .Values.nodes.middlemanager.name }}-deployment"
+  name: middlemanager
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: druid
 spec:
-  replicas: {{ .Values.nodes.middlemanager.replicaCount }}
+  type: {{ .Values.nodes.middlemanager.service.type }}
+  ports:
+  {{range .Values.nodes.middlemanager.service.ports }}
+  - name: {{ .name }}
+    port: {{ .port }}
+  {{end}}
+  # *.nginx.default.svc.cluster.local
+  selector:
+    name: middlemanager
+---
+apiVersion: apps/v1alpha1
+kind: PetSet
+metadata:
+  name: middlemanager
+spec:
+  serviceName: "middlemanager"
+  replicas: 2
   template:
     metadata:
       labels:
-        name: "{{ .Chart.Name }}-{{ .Values.nodes.middlemanager.name }}-rc"
-        app: {{ template "fullname" . }}
+        app: middlemanager
     spec:
+      terminationGracePeriodSeconds: 0
       containers:
-      - name: "{{ .Chart.Name }}-{{ .Values.nodes.middlemanager.name }}"
+      - name: middlemanager
         image: "{{ .Values.nodes.middlemanager.image.repository }}:{{ .Values.nodes.middlemanager.image.tag }}"
         imagePullPolicy: {{ .Values.nodes.middlemanager.image.pullPolicy }}
         ports:
@@ -23,7 +40,6 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: "/iap-druid/{{ .Values.iapVersion }}/conf/druid/"
-        #TODO add readiness & liveness probes
       volumes:
         - name: config-volume
           configMap:
@@ -37,20 +53,3 @@ spec:
               path: middleManager/jvm.config
             - key: "{{ .Values.nodes.middlemanager.name }}.main.config"
               path: middleManager/main.config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Values.nodes.middlemanager.service.name }}
-  #TODO flexible service Name, configMap
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-spec:
-  type: {{ .Values.nodes.middlemanager.service.type }}
-  ports:
-  {{range .Values.nodes.middlemanager.service.ports }}
-  - name: {{ .name }}
-    port: {{ .port }}
-  {{end}}
-  selector:
-    name: "{{ .Chart.Name }}-{{ .Values.nodes.middlemanager.name }}-rc"
